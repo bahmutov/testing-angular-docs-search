@@ -1,25 +1,39 @@
-// enables intelligent code completion for Cypress commands
-// https://on.cypress.io/intelligent-code-completion
 /// <reference types="cypress" />
 
-context('Example Cypress TodoMVC test', () => {
-  beforeEach(() => {
-    // usually we recommend setting baseUrl in cypress.json
-    // but for simplicity of this example we just use it here
-    // https://on.cypress.io/visit
-    cy.visit('http://todomvc.com/examples/vue/')
+describe('Angular Doc Search', () => {
+  it('shows native results', () => {
+    cy.visit('/', {
+      onBeforeLoad(win) {
+        // ServiceWorker messes up with the page load
+        delete win.navigator.__proto__.serviceWorker
+      }
+    })
+    // delay each keystroke for the demo
+    cy.get('input[aria-label=search]').type('testing', {delay: 70})
+
+    // six search results columns
+    cy.get('.search-section-header').should('have.length', 6)
+    cy.contains('.search-section-header', 'cli')
+      .parent('.search-area')
+      .find('.search-page').should('have.length.gte', 3)
   })
 
-  it('adds 2 todos', function () {
-    cy.get('.new-todo')
-      .type('learn testing{enter}')
-      .type('be cool{enter}')
-    cy.get('.todo-list li').should('have.length', 2)
-  })
+  it('shows single search result', () => {
+    // https://on.cypress.io/intercept
+    cy.intercept('/search-data.json', { fixture: 'single-result.json' })
+    cy.visit('/', {
+      onBeforeLoad(win) {
+        // ServiceWorker messes up with the page load
+        delete win.navigator.__proto__.serviceWorker
+      }
+    })
+    // delay each keystroke for the demo
+    cy.get('input[aria-label=search]').type('testing', { delay: 70 })
 
-  // more examples
-  //
-  // https://github.com/cypress-io/cypress-example-todomvc
-  // https://github.com/cypress-io/cypress-example-kitchensink
-  // https://on.cypress.io/writing-your-first-test
+    cy.contains('.search-section-header', 'cli')
+      .parent('.search-area')
+      .contains('.search-page', 'Testing is fun').click()
+
+    cy.location('pathname').should('equal', '/cli/test')
+  })
 })
