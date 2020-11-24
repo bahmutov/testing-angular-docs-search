@@ -1,0 +1,24 @@
+{
+  "name": "testing-angular-docs-search",
+  "version": "1.0.0",
+  "description": "Testing documentation search at angular.io",
+  "private": true,
+  "scripts": {
+    "test": "cypress run",
+    "cy:open": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahmutov/testing-angular-docs-search.git"
+  },
+  "keywords": [],
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bahmutov/testing-angular-docs-search/issues"
+  },
+  "homepage": "https://github.com/bahmutov/testing-angular-docs-search#readme",
+  "devDependencies": {
+    "cypress": "6.0.0"
+  }
+}
